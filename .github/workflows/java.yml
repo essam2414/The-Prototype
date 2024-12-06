@@ -12,6 +12,10 @@ jobs:
     name: "Build"
     runs-on: "ubuntu-latest"
 
+    strategy:
+      matrix:
+        java-version: [17, 21]
+
     steps:
       - name: "Clone repository"
         uses: actions/checkout@v4
@@ -19,5 +23,19 @@ jobs:
       - name: "Grant execute permission for gradlew"
         run: chmod +x ./gradlew
 
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.java-version }}
+          cache: "gradle"
+
       - name: "Build project"
         run: ./gradlew build
+
+      - name: "Produce distribution"
+        run: ./gradlew distZip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          path: build/distributions/The-Prototype.zip
+          name: rps-java-${{ matrix.java-version }}
