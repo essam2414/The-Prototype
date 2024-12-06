@@ -37,5 +37,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          path: build/distributions/The Prototype.zip
+          path: app/build/distributions/app.zip
           name: prototype-java-${{ matrix.java-version }}
