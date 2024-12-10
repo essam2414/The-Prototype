@@ -44,6 +44,20 @@ public class App {
         }
     }
 
+    public static List<Recipe> matchRecipes(String cameraInput) {
+        List<Recipe> matchedRecipes = new ArrayList<>();
+    
+        for (Recipe recipe : recipes) {
+            if (recipe.getName().toLowerCase().contains(cameraInput.toLowerCase()) || 
+                recipe.getIngredients().toLowerCase().contains(cameraInput.toLowerCase())) {
+                matchedRecipes.add(recipe);
+            }
+        }
+    
+        return matchedRecipes;
+    }
+    
+
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
