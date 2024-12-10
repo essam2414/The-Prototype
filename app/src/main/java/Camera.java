@@ -1,53 +1,34 @@
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class Camera {
 
-    private List<String> allIngredients; //ingredients from the recipes
     private List<String> capturedIngredients; //ingredients captured during simulation
 
     //constructor
     public Camera() {
-        this.allIngredients = new ArrayList<>();
         this.capturedIngredients = new ArrayList<>();
-        loadIngredientsFromRecipes();
-        simulateCapture();
     }
 
-    //load all ingredients from the recipe.csv file
-    private void loadIngredientsFromRecipes() {
-        try {
-            InputStream inputStream = Camera.class.getClassLoader().getResourceAsStream("recipe.csv");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String line = reader.readLine(); //skip header line
+    //capturing ingredients from the recipes provided by App
+    public void simulateCapture(List<Recipe> recipes) {
+        Random random = new Random();
+        List<String> allIngredients = new ArrayList<>();
 
-            Set<String> uniqueIngredients = new HashSet<>(); //use set to avoid duplicates
-            while ((line = reader.readLine()) != null) {
-                String[] recipe = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)"); //parse CSV line
-                String[] ingredients = recipe[1].replace("\"", "").split(", "); //split ingredients
-                for (String ingredient : ingredients) {
-                    uniqueIngredients.add(ingredient.trim());
+        //collect all unique ingredients from the recipes
+        for (Recipe recipe : recipes) {
+            String[] ingredients = recipe.getIngredients().split(", "); // Split ingredients
+            for (String ingredient : ingredients) {
+                if (!allIngredients.contains(ingredient)) {
+                    allIngredients.add(ingredient.trim());
                 }
             }
-            this.allIngredients.addAll(uniqueIngredients); //convert set to list
-            reader.close();
-        } catch (Exception ex) {
-            System.out.println("Error loading ingredients: " + ex.getMessage());
         }
-    }
 
-    //simulate capturing ingredients from the fridge
-    private void simulateCapture() {
-        Random random = new Random();
+        //select 5 to 10 ingredients
         int numIngredients = random.nextInt(6) + 5; //random number (5-10)
         capturedIngredients.clear();
-
         while (capturedIngredients.size() < numIngredients) {
             String ingredient = allIngredients.get(random.nextInt(allIngredients.size()));
             if (!capturedIngredients.contains(ingredient)) {
@@ -56,11 +37,12 @@ public class Camera {
         }
     }
 
-    //get the captured ingredients
+    //get captured ingredients
     public List<String> getCapturedIngredients() {
         return capturedIngredients;
     }
 
+    //print ingredients
     public void printCapturedIngredients() {
         System.out.println("Captured Ingredients:");
         for (String ingredient : capturedIngredients) {
