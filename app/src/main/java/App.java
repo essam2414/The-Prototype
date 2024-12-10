@@ -64,5 +64,23 @@ public class App {
         loadRecipes();
         printRecipes(recipes);
 
+        Camera camera = new Camera();
+        camera.simulateCapture(recipes); //pass the list of recipes to the camera
+        camera.printCapturedIngredients();
+
+        List<String> fridgeIngredients = camera.getCapturedIngredients();
+        System.out.println("\nIngredients detected by the camera: " + fridgeIngredients);
+
+        //match recipes
+        List<Recipe> matchedRecipes = new ArrayList<>();
+        for (String ingredient : fridgeIngredients) {
+            matchedRecipes.addAll(matchRecipes(ingredient));
+        }
+
+        //print matched recipes
+        System.out.println("\nMatched Recipes Based on Camera Input:");
+        for (Recipe recipe : matchedRecipes) {
+            System.out.println(recipe.toString());
+        }
     }
 }
