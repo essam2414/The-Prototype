@@ -39,7 +39,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("HelloFX")
+    mainClass.set("UI")
 }
 
 tasks.named<Test>("test") {
