@@ -1,0 +1,100 @@
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class UI extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        // Title
+        Label titleLabel = new Label("SSH Recipe Finder");
+        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
+        titleLabel.setMaxWidth(Double.MAX_VALUE);
+        titleLabel.setStyle("-fx-alignment: center; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
+        
+        // Ingredients List Section
+        Label ingredientsLabel = new Label("Ingredients from Fridge:");
+        ingredientsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        ListView<String> ingredientsList = new ListView<>();
+        ObservableList<String> ingredients = FXCollections.observableArrayList(
+            "Eggs", "Milk", "Cheese", "Flour", "Sugar" // Example items
+        );
+        ingredientsList.setItems(ingredients);
+        ingredientsList.setPrefWidth(200);
+        ingredientsList.setPrefHeight(400);
+
+        VBox ingredientsBox = new VBox(10, ingredientsLabel, ingredientsList);
+        ingredientsBox.setPrefWidth(200);
+
+        // Recipe Table Section
+        Label recipeLabel = new Label("Matched Recipes:");
+        recipeLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        TableView<Recipe> recipeTable = new TableView<>();
+        recipeTable.setPrefHeight(200);
+
+        TableColumn<Recipe, String> nameColumn = new TableColumn<>("Recipe Name");
+        //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
+        nameColumn.setPrefWidth(100);
+
+        TableColumn<Recipe, String> ingredientsColumn = new TableColumn<>("Ingredients");
+        //ingredientsColumn.setCellValueFactory(data -> data.getValue().ingredientsProperty());
+        ingredientsColumn.setPrefWidth(100);
+
+        TableColumn<Recipe, String> stepsColumn = new TableColumn<>("Steps");
+        //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
+        nameColumn.setPrefWidth(100);
+
+        TableColumn<Recipe, String> cookColumn = new TableColumn<>("Cook Time");
+        //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
+        nameColumn.setPrefWidth(100);
+
+        TableColumn<Recipe, String> matchColumn = new TableColumn<>("Percentage match");
+        //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
+        nameColumn.setPrefWidth(100);
+
+        recipeTable.getColumns().addAll(nameColumn, ingredientsColumn, stepsColumn, cookColumn, matchColumn);
+
+        VBox recipeBox = new VBox(10, recipeLabel, recipeTable);
+        HBox.setHgrow(recipeBox, Priority.ALWAYS);
+
+        // Layout for Ingredients and Recipes
+        HBox mainContent = new HBox(20, ingredientsBox, recipeBox);
+
+        // Buttons Section
+        Button changeButton = new Button("Change Recipe");
+        changeButton.setStyle("-fx-padding: 10px; -fx-background-color: #0078d7; -fx-text-fill: white;");
+
+        Button deleteButton = new Button("Delete Recipe");
+        deleteButton.setStyle("-fx-padding: 10px; -fx-background-color: #d32f2f; -fx-text-fill: white;");
+
+        HBox buttonBox = new HBox(10, changeButton, deleteButton);
+        buttonBox.setStyle("-fx-padding: 10;");
+        buttonBox.setSpacing(10);
+
+        // Main Layout
+        VBox layout = new VBox(10, titleLabel, mainContent, buttonBox);
+        layout.setStyle("-fx-padding: 20; -fx-background-color: #f0f0f0;");
+
+        // Scene and Stage
+        Scene scene = new Scene(layout, 700, 600);
+        primaryStage.setTitle("Recipe Finder");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
