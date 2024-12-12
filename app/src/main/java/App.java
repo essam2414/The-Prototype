@@ -68,20 +68,10 @@ public class App {
         return (double) matchedCount / recipeIngredients.length * 100;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-
-        //load recipes.csv 
-        loadRecipes();
-        printRecipes(recipes);
-
-        //simulate camera functionality
-        Camera camera = new Camera();
-        camera.simulateCapture(recipes); // Pass the list of recipes to the camera
-        camera.printCapturedIngredients();
-
+    public static List<RecipeMatch> matchedRecipes(List<String> fridgeIngredients) {
+        
         //fetch detected ingredients
-        List<String> fridgeIngredients = camera.getCapturedIngredients();
+        System.out.println("---------------------------------------------------------");
         System.out.println("\nIngredients detected by the camera: " + fridgeIngredients);
 
         //calculate match percentages
@@ -100,5 +90,12 @@ public class App {
             RecipeMatch match = recipeMatches.get(i);
             System.out.printf("%s (%.1f%% match)\n", match.getRecipe().getName(), match.getMatchPercentage());
         }
+
+        System.out.println("---------------------------------------------------------");
+        return recipeMatches;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new App().getGreeting());
     }
 }
