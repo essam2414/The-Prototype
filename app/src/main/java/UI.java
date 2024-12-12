@@ -11,6 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.ArrayList;import java.util.List;
+
+
 
 public class UI extends Application {
 
@@ -28,7 +31,6 @@ public class UI extends Application {
 
         ListView<String> ingredientsList = new ListView<>();
         ObservableList<String> ingredients = FXCollections.observableArrayList(
-            "Eggs", "Milk", "Cheese", "Flour", "Sugar" // Example items
         );
         ingredientsList.setItems(ingredients);
         ingredientsList.setPrefWidth(200);
@@ -71,15 +73,22 @@ public class UI extends Application {
 
         // Layout for Ingredients and Recipes
         HBox mainContent = new HBox(20, ingredientsBox, recipeBox);
-
+        
         // Buttons Section
+        Button GetIngredients = new Button("Get Ingredients");
+        GetIngredients.setStyle("-fx-padding: 10px; -fx-background-color: #59326C; -fx-text-fill: white;");
+        GetIngredients.setOnAction(e -> GetIngredientss());
+
+
         Button changeButton = new Button("Change Recipe");
         changeButton.setStyle("-fx-padding: 10px; -fx-background-color: #0078d7; -fx-text-fill: white;");
+        changeButton.setTranslateX(300);
 
         Button deleteButton = new Button("Delete Recipe");
         deleteButton.setStyle("-fx-padding: 10px; -fx-background-color: #d32f2f; -fx-text-fill: white;");
+        deleteButton.setTranslateX(300);
 
-        HBox buttonBox = new HBox(10, changeButton, deleteButton);
+        HBox buttonBox = new HBox(10,GetIngredients, changeButton, deleteButton);
         buttonBox.setStyle("-fx-padding: 10;");
         buttonBox.setSpacing(10);
 
@@ -93,6 +102,25 @@ public class UI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+        private Camera camera; 
+    private List<String> fridgeIngredients;
+
+    private void GetIngredientss() {
+        
+        if (fridgeIngredients == null) {
+            camera = new Camera();
+            camera.simulateCapture(App.recipes); // Pass the list of recipes to the camera
+            camera.printCapturedIngredients();
+            fridgeIngredients = camera.getCapturedIngredients(); // Store the captured ingredients
+        }
+        
+
+        
+
+        // After picture is taken, show the top recipes based on the captured fridge ingredients
+    }
+
+
 
     public static void main(String[] args) {
         launch(args);
