@@ -22,7 +22,7 @@ public class App {
         System.out.println("---------------------------------------------------");
     }
 
-    private static String[] parseLine(String line) {
+    public static String[] parseLine(String line) {
         // Regular expression to match fields with or without quotes
         return line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     }
