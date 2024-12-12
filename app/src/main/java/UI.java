@@ -1,3 +1,5 @@
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,14 +13,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.ArrayList;import java.util.List;
-
 
 
 public class UI extends Application {
 
+    private Camera camera;
+    private List<String> fridgeIngredients;
+    private ListView<String> ingredientsList;
+
     @Override
     public void start(Stage primaryStage) {
+
+        // Initialize App and load recipes
+        App.loadRecipes();
+
         // Title
         Label titleLabel = new Label("SSH Recipe Finder");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
@@ -29,7 +37,7 @@ public class UI extends Application {
         Label ingredientsLabel = new Label("Ingredients from Fridge:");
         ingredientsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-        ListView<String> ingredientsList = new ListView<>();
+        ingredientsList = new ListView<>();
         ObservableList<String> ingredients = FXCollections.observableArrayList(
         );
         ingredientsList.setItems(ingredients);
@@ -44,7 +52,7 @@ public class UI extends Application {
         recipeLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         TableView<Recipe> recipeTable = new TableView<>();
-        recipeTable.setPrefHeight(200);
+        recipeTable.setPrefHeight(400);
 
         TableColumn<Recipe, String> nameColumn = new TableColumn<>("Recipe Name");
         //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
@@ -62,7 +70,7 @@ public class UI extends Application {
         //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
         nameColumn.setPrefWidth(100);
 
-        TableColumn<Recipe, String> matchColumn = new TableColumn<>("Percentage match");
+        TableColumn<Recipe, String> matchColumn = new TableColumn<>("% match");
         //nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
         nameColumn.setPrefWidth(100);
 
@@ -77,7 +85,7 @@ public class UI extends Application {
         // Buttons Section
         Button GetIngredients = new Button("Get Ingredients");
         GetIngredients.setStyle("-fx-padding: 10px; -fx-background-color: #59326C; -fx-text-fill: white;");
-        GetIngredients.setOnAction(e -> GetIngredientss());
+        GetIngredients.setOnAction(e -> GetIngredients());
 
 
         Button changeButton = new Button("Change Recipe");
@@ -102,24 +110,14 @@ public class UI extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-        private Camera camera; 
-    private List<String> fridgeIngredients;
 
-    private void GetIngredientss() {
-        
-        if (fridgeIngredients == null) {
-            camera = new Camera();
-            camera.simulateCapture(App.recipes); // Pass the list of recipes to the camera
-            camera.printCapturedIngredients();
-            fridgeIngredients = camera.getCapturedIngredients(); // Store the captured ingredients
-        }
-        
-
-        
-
-        // After picture is taken, show the top recipes based on the captured fridge ingredients
+    private void GetIngredients() {
+        camera = new Camera();
+        camera.simulateCapture(App.recipes); // Pass the list of recipes to the camera
+        camera.printCapturedIngredients();
+        fridgeIngredients = camera.getCapturedIngredients(); // Store the captured ingredients
+        ingredientsList.getItems().setAll(fridgeIngredients);
     }
-
 
 
     public static void main(String[] args) {
