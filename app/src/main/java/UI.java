@@ -16,7 +16,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-
 public class UI extends Application {
 
     private Camera camera;
@@ -38,18 +37,17 @@ public class UI extends Application {
         Label titleLabel = new Label("SSH Recipe Finder");
         titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
         titleLabel.setMaxWidth(Double.MAX_VALUE);
-        titleLabel.setStyle("-fx-alignment: center; -fx-font-size: 24px; -fx-font-weight: bold; -fx-padding: 10;");
-        
+
         // Ingredients List Section
         Label ingredientsLabel = new Label("Ingredients");
         ingredientsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         ingredientsList = new ListView<>();
-        ObservableList<String> ingredients = FXCollections.observableArrayList(
-        );
+        ObservableList<String> ingredients = FXCollections.observableArrayList();
         ingredientsList.setItems(ingredients);
-        ingredientsList.setPrefWidth(200);
-        ingredientsList.setPrefHeight(400);
+
+        // Allow ingredientsList to grow with the layout
+        VBox.setVgrow(ingredientsList, Priority.ALWAYS);
 
         Button GetIngredients = new Button("Get Ingredients");
         GetIngredients.setStyle("-fx-padding: 12px; -fx-background-color: #59326C; -fx-text-fill: white;");
@@ -57,18 +55,18 @@ public class UI extends Application {
 
         VBox ingredientsBox = new VBox(10, ingredientsLabel, ingredientsList, GetIngredients);
         ingredientsBox.setPrefWidth(200);
+        VBox.setVgrow(ingredientsBox, Priority.ALWAYS);
 
         // Recipe Table Section
         Label recipeLabel = new Label("Matched Recipes:");
         recipeLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
         recipeTable = new TableView<>();
-        //recipeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         recipeTable.setPrefHeight(400);
 
         TableColumn<RecipeMatch, String> nameColumn = new TableColumn<>("Recipe Name");
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRecipe().getName()));
-        nameColumn.setPrefWidth(100);
+        nameColumn.setPrefWidth(150);
 
         TableColumn<RecipeMatch, String> ingredientsColumn = new TableColumn<>("Ingredients");
         ingredientsColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRecipe().getIngredients()));
@@ -80,21 +78,21 @@ public class UI extends Application {
 
         TableColumn<RecipeMatch, String> cookColumn = new TableColumn<>("Cook Time");
         cookColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRecipe().getCookTime() + " mins"));
-        cookColumn.setPrefWidth(50);
+        cookColumn.setPrefWidth(75);
 
         TableColumn<RecipeMatch, String> matchColumn = new TableColumn<>("% match");
         matchColumn.setCellValueFactory(data -> new SimpleStringProperty(String.format("%.1f%%", data.getValue().getMatchPercentage())));
-        matchColumn.setPrefWidth(50);
+        matchColumn.setPrefWidth(75);
 
         recipeTable.getColumns().addAll(nameColumn, ingredientsColumn, stepsColumn, cookColumn, matchColumn);
 
         // Add horizontal scrollbar by wrapping the TableView in a ScrollPane
         ScrollPane scrollPane = new ScrollPane(recipeTable);
         scrollPane.setFitToHeight(true); // Allow vertical fit
-        scrollPane.setFitToWidth(false); // Allow horizontal scrolling
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setFitToWidth(true); // Allow horizontal fit
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        VBox recipeBox = new VBox(10, recipeLabel, recipeTable);
+        VBox recipeBox = new VBox(10, recipeLabel, scrollPane);
         HBox.setHgrow(recipeBox, Priority.ALWAYS);
 
         // Buttons Section below Recipe Table
@@ -106,17 +104,19 @@ public class UI extends Application {
 
         HBox tableButtons = new HBox(20, changeButton, deleteButton);
         tableButtons.setStyle("-fx-alignment: center;");
-        tableButtons.setSpacing(20);
 
         VBox tableWithButtons = new VBox(10, recipeBox, tableButtons);
 
         // Main Layout
         HBox mainContent = new HBox(20, ingredientsBox, tableWithButtons);
+        HBox.setHgrow(tableWithButtons, Priority.ALWAYS);
+
         VBox layout = new VBox(10, titleLabel, mainContent);
+        VBox.setVgrow(mainContent, Priority.ALWAYS);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #f0f0f0;");
 
         // Scene and Stage
-        Scene scene = new Scene(layout, 700, 600);
+        Scene scene = new Scene(layout, 800, 550);
         primaryStage.setTitle("Recipe Finder");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -132,7 +132,6 @@ public class UI extends Application {
         recipeMatchData = FXCollections.observableArrayList(matchedRecipes);
         recipeTable.setItems(recipeMatchData);
     }
-
 
     public static void main(String[] args) {
         launch(args);
