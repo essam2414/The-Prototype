@@ -240,7 +240,7 @@ public class UI extends Application {
     private void HideRecipe(TableView<RecipeMatch> recipeTable) {
         RecipeMatch selectedRecipeMatch = recipeTable.getSelectionModel().getSelectedItem(); // Fetch the selected RecipeMatch
         if (selectedRecipeMatch != null) {
-            boolean confirm = showConfirmation("Delete Recipe", "Are you sure you want to delete this recipe?");
+            boolean confirm = showConfirmation("Hide Recipe", "Are you sure you want to hide this recipe?");
             if (confirm) {
                 recipeTable.getItems().remove(selectedRecipeMatch); // Remove selected RecipeMatch from the table
             }
