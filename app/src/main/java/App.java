@@ -69,10 +69,6 @@ public class App {
     }
 
     public static List<RecipeMatch> matchedRecipes(List<String> fridgeIngredients) {
-        
-        //fetch detected ingredients
-        System.out.println("---------------------------------------------------------");
-        System.out.println("\nIngredients detected by the camera: " + fridgeIngredients);
 
         //calculate match percentages
         List<RecipeMatch> recipeMatches = new ArrayList<>();
@@ -85,13 +81,14 @@ public class App {
         Collections.sort(recipeMatches, Comparator.comparingDouble(RecipeMatch::getMatchPercentage).reversed());
 
         //print top 3 matching recipes
-        System.out.println("\nTop 3 Matching Recipes:");
+        System.out.println("Top 3 Matching Recipes:");
         for (int i = 0; i < Math.min(3, recipeMatches.size()); i++) {
             RecipeMatch match = recipeMatches.get(i);
             System.out.printf("%s (%.1f%% match)\n", match.getRecipe().getName(), match.getMatchPercentage());
         }
-
+        System.out.println();
         System.out.println("---------------------------------------------------------");
+        System.out.println();
         return recipeMatches;
     }
 
