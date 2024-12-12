@@ -48,5 +48,6 @@ public class Camera {
         for (String ingredient : capturedIngredients) {
             System.out.println("- " + ingredient);
         }
+        System.out.println();
     }
 }
