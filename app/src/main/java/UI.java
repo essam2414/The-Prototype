@@ -25,6 +25,7 @@ public class UI extends Application {
     public void start(Stage primaryStage) {
 
         // Initialize App and load recipes
+        App.welcome();
         App.loadRecipes();
 
         // Title
