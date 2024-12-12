@@ -14,6 +14,14 @@ public class App {
         return "Recipe SSH Prototype";
     }
 
+    public static void welcome() {
+        System.out.println("---------------------------------------------------");
+        System.out.println("Welcome to SSH recipe finder");
+        System.out.println("Version 1");
+        System.out.println("All interaction with the GUI will be recorded here");
+        System.out.println("---------------------------------------------------");
+    }
+
     private static String[] parseLine(String line) {
         // Regular expression to match fields with or without quotes
         return line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
